@@ -1,0 +1,64 @@
+<!DOCTYPE html> 
+<html> 
+  <head> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+  <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+
+  <style>
+    img {
+      width: 50%;
+    }
+  </style>
+</head> 
+
+
+  <body> 
+
+     <!-- Start of 5th page --><!--Documents-->
+      <div data-role="page" id="documents">
+
+        <div data-role="header" data-position="fixed">
+          <h1>Documents</h1>
+        </div><!-- /header -->
+
+     <div data-role="content"> 
+        <div id=image_grid class=ui-grid-b>
+          <div class=ui-block-a>
+            <a id=pdf1 href=# ><img src=images/images1.png /></a>
+          </div>
+          <div class=ui-block-b>
+            <a id=pdf2 href=#><img src=images/images2.png /></a>
+          </div>
+          <div class=ui-block-c>
+            <a id=pdf3 href=#><img src=images/images3.png /></a>
+          </div>
+          <div class=ui-block-a>
+            <a id=pdf4 href=#><img src=images/images4.png /></a>
+          </div>
+          <div class=ui-block-b>
+            <a id=pdf5 href=#><img src=images/images5.png /></a>
+          </div>
+          <div class=ui-block-c>
+            <a id=pdf6 href=#><img src=images/images6.png /></a>
+          </div>
+    </div>
+        </div><!-- /content -->
+
+      </div><!-- /page -->
+
+  </body>
+</html>
+
+<script>
+  $("img").bind("click", function(event)
+{
+  name = $(this).parent().attr("id");
+  window.open("PdfViewer.html?pdf="+name,"_self");
+});  
+    $("body").bind ("swiperight", function (event)
+    {   alert("right");
+    });  
+</script>

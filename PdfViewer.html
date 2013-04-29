@@ -1,0 +1,125 @@
+<!DOCTYPE html> 
+
+<html> 
+
+<head> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+  <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+<style>
+body {
+  cursor: pointer;
+}
+canvas {
+  width: 100%;
+}
+</style>
+</head> 
+<body>
+<div data-role=page>
+  <div data-role=header>
+    <h1>PDF Viewer - Swip Left and Right to Navigate</h1>
+    <a href=Homepage.html data-icon=back data-ajax="false">Back</a>      
+  </div>
+  <div data-role=content>
+    <div>
+      &nbsp; &nbsp;
+      <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+    </div>
+     <div>
+      <canvas id="the-canvas" style="border:1px solid black"></canvas>
+    </div>
+  <div>
+<div>    
+</body>
+
+</html> 
+
+ 
+  <script type="text/javascript" src="https://raw.github.com/mozilla/pdf.js/gh-pages/build/pdf.js"></script>
+  
+<script type="text/javascript">
+    
+
+    function getURLParameter(name) {
+    return decodeURI(
+        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+    );
+}
+    var url = "pdf\/"+getURLParameter("pdf")+".pdf";
+
+    //
+    // Disable workers to avoid yet another cross-origin issue (workers need the URL of
+    // the script to be loaded, and currently do not allow cross-origin scripts)
+    //
+    PDFJS.disableWorker = true;
+
+    var pdfDoc = null,
+        pageNum = 1,
+        scale = 3,
+        canvas = document.getElementById('the-canvas'),
+        ctx = canvas.getContext('2d');
+
+    //
+    // Get page info from document, resize canvas accordingly, and render page
+    //
+    function renderPage(num) {
+      // Using promise to fetch the page
+      pdfDoc.getPage(num).then(function(page) {
+        var viewport = page.getViewport(scale);
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        // Render PDF page into canvas context
+        var renderContext = {
+          canvasContext: ctx,
+          viewport: viewport
+        };
+        page.render(renderContext);
+      });
+
+      // Update page counters
+      document.getElementById('page_num').textContent = pageNum;
+      document.getElementById('page_count').textContent = pdfDoc.numPages;
+    }
+
+    //
+    // Go to previous page
+    //
+    function goPrevious() {
+      if (pageNum <= 1)
+        return;
+      pageNum--;
+      renderPage(pageNum);
+    }
+
+    //
+    // Go to next page
+    //
+    function goNext() {
+      if (pageNum >= pdfDoc.numPages)
+        return;
+      pageNum++;
+      renderPage(pageNum);
+    }
+    //
+    // Asynchronously download PDF as an ArrayBuffer
+    //
+    PDFJS.getDocument(url).then(function getPdfHelloWorld(_pdfDoc) {
+      pdfDoc = _pdfDoc;
+      renderPage(pageNum);
+    });
+
+        $("body").bind ("swiperight", function (event)
+    {   
+       goPrevious();
+    });
+
+    $("body").bind ("swipeleft", function (event)
+    {
+        goNext();
+    });    
+
+  </script>  
